@@ -9,6 +9,12 @@ export class User {
   age: number;
   @Prop()
   id: string;
+  @Prop()
+  remark: string;
+  @Prop()
+  startTime: number;
+  @Prop()
+  updateTime?: number;
 }
 
 export type UserDocument = Document & User;

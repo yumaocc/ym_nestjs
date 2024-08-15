@@ -16,6 +16,7 @@ specifiers:
   '@typescript-eslint/eslint-plugin': ^6.0.0
   '@typescript-eslint/parser': ^6.0.0
   cors: ^2.8.5
+  dayjs: ^1.11.12
   eslint: ^8.42.0
   eslint-config-prettier: ^9.0.0
   eslint-plugin-prettier: ^5.0.0
@@ -31,6 +32,7 @@ specifiers:
   ts-node: ^10.9.1
   tsconfig-paths: ^4.2.0
   typescript: ^5.1.3
+  uuid: ^10.0.0
 
 dependencies:
   '@nestjs/common': 10.3.3_9f6861f115c5f7fffc0458a50468b23c
@@ -39,9 +41,11 @@ dependencies:
   '@nestjs/mongoose': 10.0.10_52661ae1505ceb180cc37be8b9f46cd7
   '@nestjs/platform-express': 10.3.3_19f75c6bb8e5380ba94b72ee717e83ff
   cors: 2.8.5
+  dayjs: 1.11.12
   mongoose: 8.5.3
   reflect-metadata: 0.2.1
   rxjs: 7.8.1
+  uuid: 10.0.0
 
 devDependencies:
   '@nestjs/cli': 10.3.2
@@ -2244,6 +2248,10 @@ packages:
       shebang-command: 2.0.0
       which: 2.0.2
     dev: true
+
+  /dayjs/1.11.12:
+    resolution: {integrity: sha512-Rt2g+nTbLlDWZTwwrIXjy9MeiZmSDI375FvZs72ngxx8PDC6YXOeR3q5LAuPzjZQxhiWdRKac7RKV+YyQYfYIg==}
+    dev: false
 
   /debug/2.6.9:
     resolution: {integrity: sha1-XRKFFd8TT/Mn6QpMk/Tgd6U2NB8=}
@@ -5217,6 +5225,11 @@ packages:
   /utils-merge/1.0.1:
     resolution: {integrity: sha1-n5VxD1CiZ5R7LMwSR0HBAoQn5xM=}
     engines: {node: '>= 0.4.0'}
+    dev: false
+
+  /uuid/10.0.0:
+    resolution: {integrity: sha512-8XkAphELsDnEGrDxUOHB3RGvXz6TeuYSGEZBOjtTtPm2lwhGBjLgOzLHB63IUWfBpNucQjND6d3AOudO+H3RWQ==}
+    hasBin: true
     dev: false
 
   /v8-compile-cache-lib/3.0.1:
