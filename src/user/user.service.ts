@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from './user.schema';
-
+import { v4 as uuid } from 'uuid';
+import * as dayjs from 'dayjs';
 @Injectable()
 export class UserService {
   constructor(@InjectModel(User.name) private dp: Model<UserDocument>) {}
@@ -11,20 +12,40 @@ export class UserService {
     return this.dp.findOne({ name });
   }
 
-  getAll() {
-    return this.dp.find() ?? [];
+  async getAll() {
+    const res = (await this.dp.find()) ?? [];
+    return {
+      data: res,
+      success: true,
+      code: 200,
+      message: '请求成功',
+    };
   }
 
-  create(user: User) {
-    const dp = new this.dp(user);
-    return dp.save();
+  async create(user: User) {
+    const dp = new this.dp({
+      ...user,
+      updateTime: null,
+      id: uuid(),
+    });
+    const res = await dp.save();
+    return res.id;
   }
 
-  delete(id: User['id']) {
-    return this.dp.findByIdAndDelete({ id });
+  async delete(id: User['id']) {
+    await this.dp.findByIdAndDelete(id);
+    return;
   }
 
-  update(params: User) {
-    return this.dp.findByIdAndUpdate({ id: params.id }, params);
+  async update(params: User) {
+    const res = await this.dp.findOneAndUpdate(
+      { id: params.id },
+      {
+        ...params,
+        updateTime: dayjs().valueOf(),
+      },
+    );
+
+    return res.id;
   }
 }
