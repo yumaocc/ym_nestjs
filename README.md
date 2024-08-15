@@ -19,5 +19,14 @@ brew services stop mongodb-community
 
 ```bash
 $ pnpm install
-$ pnpm start
+$ pnpm start:dev
+```
+
+# 快捷命令
+
+一键生成模块,第一个简洁，第二个命令会自动生成方法
+
+```bash
+$ pnpm run create xxx
+$ nest g res xxx
 ```
