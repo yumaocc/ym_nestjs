@@ -2,24 +2,39 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import * as express from 'express';
-import { createServer, proxy } from 'aws-serverless-express';
-import { Server } from 'http';
+import serverlessExpress from '@vendia/serverless-express';
+import { Context, Handler } from 'aws-lambda';
 
 const expressApp = express();
-let cachedServer: Server;
 
-async function bootstrapServer(): Promise<Server> {
+async function bootstrapServer() {
   const app = await NestFactory.create(
     AppModule,
     new ExpressAdapter(expressApp),
   );
   await app.init();
-  return createServer(expressApp);
+  return serverlessExpress({ app: expressApp });
 }
 
-export async function handler(event: any, context: any) {
-  if (!cachedServer) {
-    cachedServer = await bootstrapServer();
-  }
-  return proxy(cachedServer, event, context, 'PROMISE').promise;
+let server: Handler;
+
+async function bootstrapLocal() {
+  const app = await NestFactory.create(AppModule);
+  const port = process.env.PORT || 3005;
+  await app.listen(port);
+  console.log(`Application is running on: http://localhost:${port}`);
 }
+
+// 检测是否在本地开发环境
+if (process.env.NODE_ENV !== 'production') {
+  bootstrapLocal();
+}
+
+const handler: Handler = async (event: any, context: Context) => {
+  if (!server) {
+    server = await bootstrapServer();
+  }
+  return server(event, context);
+};
+
+export { handler };
