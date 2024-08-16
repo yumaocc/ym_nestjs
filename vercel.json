@@ -1,9 +1,9 @@
 {
   "builds": [
     {
-      "src": "src/index.js",
+      "src": "src/main.js",
       "use": "@vercel/node"
     }
   ],
-  "routes": [{ "src": "/(.*)", "dest": "/src/index.js" }]
+  "routes": [{ "src": "/(.*)", "dest": "/src/main.js" }]
 }
