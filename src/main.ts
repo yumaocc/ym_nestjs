@@ -1,8 +1,21 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { createServer, proxy } from 'aws-serverless-express';
+import * as express from 'express';
+import { Server } from 'http';
 
-export async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: true });
-  await app.listen(process.env.PORT || 3000);
+let cachedServer: Server;
+
+async function bootstrapServer(): Promise<Server> {
+  const expressApp = express();
+  const app = await NestFactory.create(AppModule, expressApp);
+  await app.init();
+  return createServer(expressApp);
 }
-bootstrap();
+
+export async function handler(event: any, context: any) {
+  if (!cachedServer) {
+    cachedServer = await bootstrapServer();
+  }
+  return proxy(cachedServer, event, context, 'PROMISE').promise;
+}
