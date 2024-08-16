@@ -1,22 +1,22 @@
-// import { Document } from 'mongoose';
-// import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Document } from 'mongoose';
+import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 
-// @Schema()
-// export class User {
-//   @Prop()
-//   name: string;
-//   @Prop()
-//   age: number;
-//   @Prop()
-//   id: string;
-//   @Prop()
-//   remark: string;
-//   @Prop()
-//   startTime: number;
-//   @Prop()
-//   updateTime?: number;
-// }
+@Schema()
+export class TestUser {
+  @Prop()
+  name: string;
+  @Prop()
+  age: number;
+  @Prop()
+  id: string;
+  @Prop()
+  remark: string;
+  @Prop()
+  startTime: number;
+  @Prop()
+  updateTime?: number;
+}
 
-// export type UserDocument = Document & User;
+export type UserDocument = Document & TestUser;
 
-// export const UserSchema = SchemaFactory.createForClass(User);
+export const UserSchema = SchemaFactory.createForClass(TestUser);
