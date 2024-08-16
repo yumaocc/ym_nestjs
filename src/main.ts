@@ -3,7 +3,6 @@ import { AppModule } from './app.module';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import express from 'express';
 import serverlessExpress from '@vendia/serverless-express';
-import { Handler } from 'aws-lambda';
 
 const expressApp = express();
 
@@ -16,7 +15,7 @@ async function bootstrapServer() {
   return serverlessExpress({ app: expressApp });
 }
 
-let server: Handler;
+let server: any;
 
 async function bootstrapLocal() {
   const app = await NestFactory.create(AppModule);
@@ -30,7 +29,7 @@ if (process.env.NODE_ENV !== 'production') {
   bootstrapLocal();
 }
 
-const handler: Handler = async (event: any, context: any) => {
+const handler = async (event: any, context: any) => {
   if (!server) {
     server = await bootstrapServer();
   }
