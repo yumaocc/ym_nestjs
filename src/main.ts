@@ -30,11 +30,11 @@ if (process.env.NODE_ENV !== 'production') {
   bootstrapLocal();
 }
 
-const handler: Handler = async (event, context) => {
+const handler: Handler = async (event: any, context: any) => {
   if (!server) {
     server = await bootstrapServer();
   }
   return server(event, context);
 };
 
-export { handler };
+export default handler;
