@@ -4,6 +4,8 @@
     "module": "commonjs",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,     // 启用实验性装饰器
+    "emitDecoratorMetadata": true,      // 启用装饰器元数据
     "strict": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
