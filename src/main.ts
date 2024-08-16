@@ -1,9 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ExpressAdapter } from '@nestjs/platform-express';
-import * as express from 'express';
+import express from 'express';
 import serverlessExpress from '@vendia/serverless-express';
-import { Context, Handler } from 'aws-lambda';
+import { Handler } from 'aws-lambda';
 
 const expressApp = express();
 
@@ -30,7 +30,7 @@ if (process.env.NODE_ENV !== 'production') {
   bootstrapLocal();
 }
 
-const handler: Handler = async (event: any, context: Context) => {
+const handler: Handler = async (event, context) => {
   if (!server) {
     server = await bootstrapServer();
   }
