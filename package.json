@@ -1,5 +1,5 @@
 {
-  "name": "nest_note",
+  "name": "ym_nestjs",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -72,5 +72,8 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "engines": {
+    "node": "18.x"
   }
 }
