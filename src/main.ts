@@ -1,39 +1,20 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ExpressAdapter } from '@nestjs/platform-express';
-import express from 'express';
-import serverlessExpress from '@vendia/serverless-express';
+import { NestExpressApplication } from '@nestjs/platform-express';
+const session = require('express-session');
 
-const expressApp = express();
-
-async function bootstrapServer() {
-  const app = await NestFactory.create(
-    AppModule,
-    new ExpressAdapter(expressApp),
+async function bootstrap() {
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  app.enableCors();
+  app.useStaticAssets('public');
+  app.use(
+    session({
+      secret: 'blog-server-secret',
+      rolling: true,
+      name: 'blog-server',
+      cookie: { maxAge: null },
+    }),
   );
-  await app.init();
-  return serverlessExpress({ app: expressApp });
+  await app.listen(process.env.PORT || 3000);
 }
-
-let server: any;
-
-async function bootstrapLocal() {
-  const app = await NestFactory.create(AppModule);
-  const port = process.env.PORT || 3005;
-  await app.listen(port);
-  console.log(`Application is running on: http://localhost:${port}`);
-}
-
-// 检测是否在本地开发环境
-if (process.env.NODE_ENV !== 'production') {
-  bootstrapLocal();
-}
-
-const handler = async (event: any, context: any) => {
-  if (!server) {
-    server = await bootstrapServer();
-  }
-  return server(event, context);
-};
-
-export default handler;
+bootstrap();
