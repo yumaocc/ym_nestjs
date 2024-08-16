@@ -13,6 +13,8 @@ export class UserController {
 
   @Get('/')
   getUsers() {
+    console.log('首页');
+
     return this.userService.getAll();
   }
 
