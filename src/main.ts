@@ -4,7 +4,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const session = require('express-session');
 
-async function bootstrap() {
+export default async function bootstrap() {
   console.log('初始化');
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
