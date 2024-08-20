@@ -13,8 +13,6 @@ export class UserController {
 
   @Get('/')
   getUsers() {
-    console.log('首页');
-
     return this.userService.getAll();
   }
 
@@ -25,8 +23,6 @@ export class UserController {
 
   @Post('/delete')
   deleteUser(@Body() params: any) {
-    console.log('id', params);
-
     return this.userService.delete(params.id);
   }
 
