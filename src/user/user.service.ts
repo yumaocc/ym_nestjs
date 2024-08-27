@@ -4,13 +4,16 @@ import { Model } from 'mongoose';
 import { TestUser, UserDocument } from './user.schema';
 import { v4 as uuid } from 'uuid';
 import * as dayjs from 'dayjs';
+// 加密
+import * as bcrypt from 'bcryptjs';
+
 @Injectable()
 export class UserService {
   @InjectModel(TestUser.name) private dp: Model<UserDocument>;
   constructor() {}
 
   async get(name: string) {
-    return this.dp.findOne({ name });
+    return await this.dp.findOne({ name }).select('-_id');
   }
 
   async getAll() {
@@ -25,6 +28,7 @@ export class UserService {
       ...user,
       updateTime: null,
       id: uuid(),
+      password: bcrypt.hash(user.password, 10),
     });
     const res = await dp.save();
     return res.id;
@@ -43,7 +47,6 @@ export class UserService {
         updateTime: dayjs().valueOf(),
       },
     );
-
     return res.id;
   }
 }

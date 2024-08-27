@@ -5,12 +5,14 @@ import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 export class TestUser {
   @Prop()
   name: string;
+  @Prop({ required: true })
+  password: string;
   @Prop()
   age: number;
   @Prop()
   id: string;
   @Prop()
-  remark: string;
+  remark?: string;
   @Prop()
   startTime: number;
   @Prop()
