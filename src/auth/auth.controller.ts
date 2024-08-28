@@ -1,5 +1,11 @@
 // auth.controller.ts
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  Res,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Public } from 'src/utils';
 import { UserService } from 'src/user/user.service';
@@ -24,9 +30,9 @@ export class AuthController {
 
       res.cookie(TOKEN_KEY, token, { httpOnly: true });
 
-      res.send({ data: { token } });
+      res.send({ data: { token }, success: true, code: 200 });
     } else {
-      return { error: 'Invalid credentials' };
+      throw new UnauthorizedException('账号密码错误');
     }
   }
   @Public()
@@ -36,7 +42,7 @@ export class AuthController {
       const decoded = await this.authService.verifyToken(body.token);
       return { decoded };
     } catch (error) {
-      return { error: 'Invalid token' };
+      throw new UnauthorizedException('登录过期');
     }
   }
 }

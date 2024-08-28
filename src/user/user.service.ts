@@ -4,8 +4,8 @@ import { Model } from 'mongoose';
 import { TestUser, UserDocument } from './user.schema';
 import { v4 as uuid } from 'uuid';
 import * as dayjs from 'dayjs';
-// 加密
-import * as bcrypt from 'bcryptjs';
+import { PaginationDto } from 'src/common/pagination/pagination.dto';
+import { Pagination } from 'src/common/pagination';
 
 @Injectable()
 export class UserService {
@@ -16,11 +16,30 @@ export class UserService {
     return await this.dp.findOne({ name }).select('-_id');
   }
 
+  async getUsersQuery(params: PaginationDto) {
+    const { pageSize, current, ...rest } = params;
+
+    const skip = (current - 1) * pageSize;
+
+    const query = Object.entries(rest).reduce((acc, [key, value]) => {
+      acc[key] = { $regex: value, $options: 'i' };
+      return acc;
+    }, {});
+
+    const total = await this.getAll();
+
+    const records = await this.dp
+      .find(query)
+      .skip(skip)
+      .limit(pageSize)
+      .select('-_id');
+
+    return new Pagination(pageSize, current, total.length, records);
+  }
+
   async getAll() {
     const res = await this.dp.find();
-    return {
-      data: res,
-    };
+    return res;
   }
 
   async create(user: TestUser) {
@@ -28,15 +47,16 @@ export class UserService {
       ...user,
       updateTime: null,
       id: uuid(),
-      password: bcrypt.hash(user.password, 10),
+      createTime: dayjs().valueOf(),
     });
     const res = await dp.save();
+
     return res.id;
   }
 
   async delete(id: TestUser['id']) {
-    await this.dp.findByIdAndDelete(id);
-    return;
+    await this.dp.findOneAndDelete({ id });
+    return id;
   }
 
   async update(params: TestUser) {
